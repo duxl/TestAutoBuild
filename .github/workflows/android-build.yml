@@ -32,9 +32,20 @@ jobs:
       - name: Grant execute permission
         run: chmod +x ./gradlew
 
-      # 编译 Release APK
-      - name: Build APK
-        run: ./gradlew assembleRelease
+      # 5. 恢复 keystore
+      - name: Decode keystore
+        run: | 
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.jks
+
+      # 6. 编译 Release
+      - name: Build Release APK
+        env:
+          KEYSTORE_FILE: release.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+            ./gradlew assembleRelease
 
       # 保存 APK
       - name: Upload APK
