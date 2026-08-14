@@ -35,7 +35,7 @@ jobs:
       # 5. 恢复 keystore
       - name: Decode keystore
         run: | 
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.jks
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > app/release.jks
 
       # 6. 编译 Release
       - name: Build Release APK

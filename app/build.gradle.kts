@@ -15,9 +15,7 @@ android {
         }
     }
     namespace = "com.test.testautobuild"
-    compileSdk {
-        version = release(37)
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.test.testautobuild"
