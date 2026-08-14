@@ -1,0 +1,44 @@
+name: Android Build
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 拉取 main 分支代码
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # JDK 17
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # Linux 执行 gradlew 所需权限
+      - name: Grant execute permission
+        run: chmod +x ./gradlew
+
+      # 编译 Release APK
+      - name: Build APK
+        run: ./gradlew assembleRelease
+
+      # 保存 APK
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: app/build/outputs/apk/release/*.apk
